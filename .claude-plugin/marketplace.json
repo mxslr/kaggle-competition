@@ -1,0 +1,18 @@
+{
+  "name": "kaggle-competition-marketplace",
+  "description": "Marketplace hosting the kaggle-competition plugin, a research-first, rule-compliant Kaggle competition workflow for Claude Code.",
+  "owner": {
+    "name": "Marshall Rasendria"
+  },
+  "plugins": [
+    {
+      "name": "kaggle-competition",
+      "source": "./",
+      "version": "1.0.0",
+      "description": "Research-first Kaggle competition workflow: rules ledger as a hard gate, newest strong models, leak-free validation, experiment log, ensembling, reproducible professional notebooks, and lessons carried across competitions.",
+      "author": {
+        "name": "Marshall Rasendria"
+      }
+    }
+  ]
+}

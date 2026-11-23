@@ -1,0 +1,14 @@
+{
+  "name": "kaggle-competition",
+  "version": "1.0.0",
+  "description": "End-to-end Kaggle competition workflow for the best rule-compliant score: rules and FAQ ledger as a hard gate, research of the newest strong models and past winning solutions, leak-free validation that tracks the leaderboard, one-lever-at-a-time experiments with an experiment log, ensembling and robust thresholds, reproducible notebooks that fit the runtime limit, professional notebook writing, and lessons carried from one competition to the next.",
+  "author": {
+    "name": "Marshall Rasendria"
+  },
+  "keywords": [
+    "kaggle", "competition", "leaderboard", "machine-learning", "deep-learning",
+    "research", "sota", "cross-validation", "ensembling", "rules", "faq",
+    "notebook", "reproducibility", "tabular", "computer-vision", "video",
+    "nlp", "llm", "time-series", "audio"
+  ]
+}
