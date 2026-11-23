@@ -7,6 +7,15 @@ description: "Complete playbook for competing in a Kaggle competition (or any le
 
 The goal is the highest **final (usually private) leaderboard** score that survives the organizers' verification. A disqualified 0.99 is worth zero, and a public-LB jump that does not generalise is worth less than a stable cross-validation gain. Everything below serves those two facts.
 
+## Where the work runs
+
+All heavy work runs on Kaggle, inside the competition notebook: data loading, EDA, preprocessing, feature extraction, training, validation, inference and ensembling. The user's own machine is not used for training or for processing competition data, and competition data or pretrained weights are not downloaded to it.
+
+- Locally, only write the notebook source, build the `.ipynb` and run fast static checks (see the `kaggle-competition:notebook` skill).
+- Deliver every version as an `.ipynb` file the user imports into Kaggle (send it with the file-sharing tool when one is available, otherwise give its path), together with the run instructions below.
+- Results come back as outputs the user pastes, or by reading the finished Kaggle notebook's output page in the user's browser when they ask for it.
+- Analyses that need data (EDA, error analysis, threshold or label checks) are written as notebook sections or as small CPU check cells that the user runs on Kaggle.
+
 Reply in the user's language. When you give the user steps to run on Kaggle, always state: notebook name, inputs to attach, accelerator, internet on or off, whether to restart the session, expected runtime, the log lines to check, and exactly what to send back.
 
 ## Files this workflow keeps
@@ -51,16 +60,16 @@ Typical traps: test-data analysis bans, "each row predicted independently", "all
 1. Design cross-validation that mirrors how the test set differs from train (by group, subject, time, source, site). Follow `references/validation-and-selection.md`. A validation that does not track the LB is the most common reason teams plateau.
 2. Implement the metric exactly as the host defines it, and check it on a toy case.
 3. Build the simplest strong baseline first (for example GBDT for tabular, one fine-tuned pretrained backbone for images or video, one DeBERTa-class or small LLM for text). Log it as run 0.
-4. Engineer for the runtime limit from day one: config fingerprints for cached stages, a time-budget guard, a local smoke test with tiny fake models, and a notebook built from a source file. See `references/runtime-engineering.md` and the `kaggle-competition:notebook` skill.
+4. Engineer for the runtime limit from day one: config fingerprints for cached stages, a time-budget guard, a debug mode that runs the whole notebook on a small subset in minutes on Kaggle, and a notebook built from a source file. See `references/runtime-engineering.md` and the `kaggle-competition:notebook` skill.
 5. Make one early LB submission to calibrate CV against LB. From then on, CV decides.
 
 ## Phase 4: Iteration loop
 
 Repeat until the deadline or until the expected gains fall inside the noise:
 
-1. **Diagnose** the last run on out-of-fold data only (`error-analyst` agent or inline): error budget by bucket, per-model contribution, threshold stability, learning curves. Find the bucket with the largest "score if fixed".
+1. **Diagnose** the last run on out-of-fold data only, from the tables the notebook prints or from a CPU check cell the user runs on Kaggle (`error-analyst` agent when the files are at hand): error budget by bucket, per-model contribution, threshold stability, learning curves. Find the bucket with the largest "score if fixed".
 2. **Pick one lever** that targets that bucket. Rank candidates by expected gain, GPU hours and rule risk. Check it against `RULES.md` and `references/technique-catalog.md`.
-3. **Run it cheaply first**: reuse caches, retrain only the affected heads, use fewer folds or epochs for a directional check, then commit to the full run.
+3. **Run it cheaply first** on Kaggle: reuse caches, retrain only the affected heads, use fewer folds or epochs for a directional check, then commit to the full run. Hand over each version as an `.ipynb` with run instructions.
 4. **Decide with CV**, using the noise rules in `references/validation-and-selection.md`. Keep a change only if CV improves beyond noise; record the LB but do not select on it, especially when the FAQ forbids using test information.
 5. **Log** the row in `EXPERIMENTS.md` with the decision and the reason.
 6. Every few iterations, re-run the research step for the current bottleneck; new public notebooks and papers appear during a competition.
@@ -81,6 +90,7 @@ After the private LB is out (or after the final hand-in), append reusable lesson
 
 ## Non-negotiables
 
+- **Compute stays on Kaggle.** Never train, extract features or run the competition pipeline on the user's machine. Hand over notebooks to import instead.
 - **Rules beat score.** Never use a technique the ledger marks forbidden or unclear. Never build on a leak the rules ban, such as reconstructing shuffled test sequences when each row must be predicted independently.
 - **No test peeking when banned.** Do not print, plot or summarise test inputs or predictions; do not pick constants, thresholds or label conventions from LB probes when the FAQ says values must come from training data.
 - **Honest ceilings.** Compute what the current validation says is reachable and say it plainly. Leaderboards often have leak-driven tops that disappear at verification.
@@ -101,4 +111,4 @@ After the private LB is out (or after the final hand-in), append reusable lesson
 | Runtime limits, caching, time guards, smoke tests | `references/runtime-engineering.md` |
 | Lessons from past competitions | `references/lessons-learned.md` and `~/.claude/kaggle-competition/LESSONS.md` |
 | Writing the notebook | `kaggle-competition:notebook` skill |
-| OOF blending, robust threshold, LB noise tools | `scripts/oof_tools.py` (run with `--help`) |
+| OOF blending, robust threshold, LB noise tools | `scripts/oof_tools.py` (copy into a Kaggle CPU cell or upload it as a utility script; run with `--help`) |

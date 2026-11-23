@@ -18,9 +18,10 @@ A Claude Code plugin for competing in Kaggle competitions to get the best score 
   - Error budgets come from out-of-fold data, and the next experiment is ranked by expected gain, cost and rule risk.
   - Every run is logged in `comp_notes/EXPERIMENTS.md`.
 - **Ensembling and post-processing.** Simplex or hill-climbing blends, stacking, and metric-specific post-processing, all chosen on out-of-fold data.
+- **Everything runs on Kaggle.** Claude writes the notebook and hands you the `.ipynb` to import. Training, feature extraction, EDA and inference never run on your machine.
 - **Reproducible notebooks.**
   - The notebook is built from a percent-format source with numbered sections and short professional text.
-  - Stage caches are keyed by config fingerprints, a time-budget guard protects the session limit, and a local smoke test runs on CPU.
+  - Stage caches are keyed by config fingerprints, a time-budget guard protects the session limit, and a debug mode runs the whole notebook on a small subset in minutes.
 - **Learns across competitions.** Lessons go to `~/.claude/kaggle-competition/LESSONS.md`, and the plugin ships general seed lessons. Competition-specific details stay in that private file and are never published.
 - **Technique catalog.** It lists techniques that are banned in some competitions but often allowed in others, such as pseudo-labelling, adversarial validation, VLM features, cross-row features and test-time adaptation. Each comes with the question to ask the organizers.
 
@@ -46,7 +47,7 @@ A Claude Code plugin for competing in Kaggle competitions to get the best score 
 
 ## Install
 
-The hook needs Node.js on PATH (Claude Code already requires it). The scripts need Python with `numpy`, `pandas`, `scikit-learn` and `nbformat`.
+The hook needs Node.js on PATH (Claude Code already requires it). Building notebooks locally needs Python with `nbformat`. `oof_tools.py` is meant to run inside a Kaggle notebook next to the OOF files.
 
 From GitHub:
 
@@ -69,4 +70,5 @@ Restart Claude Code after installing.
 - A disqualified 0.99 is worth zero. The rules ledger is a hard gate.
 - Cross-validation decides; the public LB is a noisy check.
 - Every chosen constant has a training-data basis that the notebook states.
+- All compute runs on Kaggle; Claude delivers importable notebooks with run instructions.
 - The user owns every outward action: downloads, submissions, pushes and posts happen only on their go-ahead.

@@ -5,7 +5,7 @@
 2. Notebook source and build
 3. Stage caches keyed by config fingerprints
 4. Time-budget guard
-5. Local smoke test without a GPU
+5. Smoke tests
 6. GPU efficiency on Kaggle hardware
 7. Offline competitions
 8. Running on Kaggle
@@ -43,12 +43,11 @@ Write them into `COMPETITION.md`.
 - The final cells (ensemble, submission) must always have time left. Print the total runtime at the end.
 - Measure each stage once on Kaggle and write the times into `COMPETITION.md`. The from-scratch runtime decides whether the organizers' re-run fits.
 
-## 5. Local smoke test without a GPU
+## 5. Smoke tests
 
-- Build a tiny synthetic dataset with the same folder structure as the competition data: a few files per class, short videos or small images, a matching sample submission.
-- Replace heavy models with tiny random-initialised versions (monkeypatch `from_pretrained` to return a 2-layer config of the same class) and fake external models (detectors, gaze or pose models).
-- Run the whole notebook end to end with a debug flag (fewer folds, epochs and windows). This catches shape bugs, missing files and cache-key mistakes in minutes instead of hours of GPU time.
-- Re-run the smoke test after every change to the source.
+- All real runs happen on Kaggle. The cheapest smoke test is a **debug commit on Kaggle**: the same notebook with the debug flag on, a small subset of the data, one or two folds and one epoch. It catches shape bugs, missing inputs and cache-key mistakes in minutes instead of hours of GPU time.
+- Locally, keep checks light and data-free: build the notebook (syntax check of every cell) and, optionally, run pure helper functions on tiny synthetic inputs. Do not train, process competition data or download pretrained weights on the user's machine.
+- Re-run the debug commit after every large change to the source.
 
 ## 6. GPU efficiency on Kaggle hardware
 
@@ -77,7 +76,7 @@ Write them into `COMPETITION.md`.
 
 ## 9. Instructions to give the user for every run
 
-1. Notebook name and which source version to import.
+1. The `.ipynb` file to import, and the notebook name to use.
 2. Inputs to attach: competition data, datasets, earlier notebook outputs.
 3. Accelerator and internet setting.
 4. Whether a session restart is needed.

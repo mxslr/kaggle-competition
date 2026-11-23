@@ -45,7 +45,7 @@ These slip in without anyone deciding to break a rule:
 Before a long run, and again on the exact final notebook:
 1. Read the notebook source end to end against the ledger. For a second, independent pass, use the `rules-auditor` agent when the user allows subagents.
 2. Report findings as `severity | file:line | what the code does | rule | smallest fix`.
-3. Fix only with the user's approval, rebuild the notebook, and re-run the local smoke test.
+3. Fix only with the user's approval, rebuild the notebook, and hand the user the new `.ipynb` with an instruction to run its debug version on Kaggle first.
 4. Confirm that the from-scratch runtime fits the limit with margin, and that every input is an allowed source.
 
 ## 5. Transparency section in the notebook

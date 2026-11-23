@@ -40,6 +40,8 @@ Derive the evaluation convention from training data and the host's text, not fro
 
 ## 4. How noisy is the public LB?
 
+Run `oof_tools.py` where the OOF files live, normally a Kaggle CPU notebook with the run's output attached (upload the script as a utility script or dataset).
+
 There are two different noise questions.
 
 **How far can the public LB sit from the true score?** This is unpaired noise.

@@ -63,7 +63,7 @@ Seed lessons that transfer across competitions. Competition-specific lessons, wi
 
 - **Stage caches keyed by config fingerprints** stop interactive sessions from reusing stale artifacts. Excluding new config fields from the key while they sit at neutral defaults keeps old caches valid.
 - **A time-budget guard** that skips folds which would overrun keeps the hand-in run inside the session limit.
-- **A local smoke test with tiny fake models** on CPU catches most bugs before any GPU hour is spent.
+- **A short debug run of the same notebook on Kaggle** (tiny subset, one fold, one epoch) catches most bugs before a long run. Training and data processing stay off the user's machine.
 - **Build the notebook from a percent-format source file**, and never hand-edit the `.ipynb`.
 - **Code competitions with internet off** need wheels and weights uploaded as Kaggle datasets in advance. Test the offline install path early.
 
